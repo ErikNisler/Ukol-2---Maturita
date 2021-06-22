@@ -15,7 +15,6 @@ public class Student {
     private int subject4;
     private boolean isPassed = true;
 
-
     private Passed passed;
 
     public Student(String firstName, String lastName, LocalDate dateOfBirth, String classRoom, int subject1, int subject2, int subject3, int subject4) {
@@ -29,11 +28,17 @@ public class Student {
         this.subject4 = subject4;
     }
 
-    public Student(String firstName, String lastName, LocalDate dateOfBirth, String classRoom){
+    //V případě že nemá maturitu za sebou
+    public Student(String firstName, String lastName, LocalDate dateOfBirth, String classRoom) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.classRoom = classRoom;
+        subject1 = 0;
+        subject2 = 0;
+        subject3 = 0;
+        subject4 = 0;
+
     }
 
     public String getFirstName() {
@@ -108,18 +113,26 @@ public class Student {
         this.passed = passed;
     }
 
-    public String getDescription(){
-        return getFirstName()+", "+getLastName()+", "+getDateOfBirth()+", "+getClassRoom()+", "+getSubject1()+", "+getSubject2()+", "+getSubject3()+", "+getSubject4();
+    public String getDescription() {
+        return getFirstName() + ", " + getLastName() + ", " + getDateOfBirth() + ", " + getClassRoom() + ", " + getSubject1() + ", " + getSubject2() + ", " + getSubject3() + ", " + getSubject4();
     }
 
     public String ifPassed() {
+        if (subject1 == 0) {
+            return "Student " + getFirstName() + " " + getLastName() + " nemá maturitu za sebou!";
+        } else {
+            return rating();
+        }
+    }
+
+    public String rating() {
         ArrayList<Integer> listOfMarks = new ArrayList<>();
         listOfMarks.add(getSubject1());
         listOfMarks.add(getSubject2());
         listOfMarks.add(getSubject3());
         listOfMarks.add(getSubject4());
         int count = 0;
-        for (Integer i: listOfMarks) {
+        for (Integer i : listOfMarks) {
             count += 1;
             if (i == 5) {
                 isPassed = false;
@@ -129,16 +142,16 @@ public class Student {
             }
         }
         int sumOfMarks = 0;
-        sumOfMarks = getSubject1()+getSubject2()+getSubject3()+getSubject4();
+        sumOfMarks = getSubject1() + getSubject2() + getSubject3() + getSubject4();
         int aveMark = sumOfMarks / count;
         if (isPassed == true) {
             if (aveMark < 1.5) {
-                return "Passed with honor";
+                return "Student " + getFirstName() + " " + getLastName() + " "+Passed.PASSED_WITH_HONOR;
             } else {
-                return "Passed";
+                return "Student " + getFirstName() + " " + getLastName() + " "+Passed.PASSED;
             }
         } else {
-            return "Not passed";
+            return "Student " + getFirstName() + " " + getLastName() + " "+Passed.NOT_PASSED;
         }
     }
 }
